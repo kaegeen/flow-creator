@@ -1,0 +1,72 @@
+import React, { useState } from "react";
+
+export default function DecisionFlowBuilder() {
+  const [nodes, setNodes] = useState([]);
+  const [question, setQuestion] = useState("");
+  const [yesPath, setYesPath] = useState("");
+  const [noPath, setNoPath] = useState("");
+
+  const addNode = () => {
+    if (question) {
+      setNodes([
+        ...nodes,
+        { question, yes: yesPath || "—", no: noPath || "—" }
+      ]);
+      setQuestion("");
+      setYesPath("");
+      setNoPath("");
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-100 p-6">
+      <h1 className="text-3xl font-bold mb-6 text-center">Decision Flow Builder</h1>
+
+      <div className="flex flex-wrap gap-2 justify-center mb-6">
+        <input
+          placeholder="Decision Question"
+          value={question}
+          onChange={(e) => setQuestion(e.target.value)}
+          className="border p-2 rounded w-64"
+        />
+        <input
+          placeholder="Yes leads to..."
+          value={yesPath}
+          onChange={(e) => setYesPath(e.target.value)}
+          className="border p-2 rounded w-48"
+        />
+        <input
+          placeholder="No leads to..."
+          value={noPath}
+          onChange={(e) => setNoPath(e.target.value)}
+          className="border p-2 rounded w-48"
+        />
+        <button
+          onClick={addNode}
+          className="bg-blue-600 text-white px-4 py-2 rounded"
+        >
+          Add Step
+        </button>
+      </div>
+
+      <div className="space-y-4">
+        {nodes.map((n, i) => (
+          <div
+            key={i}
+            className="bg-white p-4 rounded shadow border"
+          >
+            <p className="font-semibold">{n.question}</p>
+            <div className="flex gap-4 mt-2">
+              <div className="flex-1 bg-green-100 p-2 rounded">
+                <strong>Yes →</strong> {n.yes}
+              </div>
+              <div className="flex-1 bg-red-100 p-2 rounded">
+                <strong>No →</strong> {n.no}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
